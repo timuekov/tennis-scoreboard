@@ -1,5 +1,6 @@
 package org.example.service;
 
+import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import org.example.model.Match;
 import org.example.model.Player;
 
@@ -26,5 +27,18 @@ public class MatchService {
 
         return uuid;
     }
+
+    public Match getMatchByUuid(UUID uuid) {
+        Match match = currentMatchStorage.getMatch(uuid);
+
+        if (match == null) {
+
+            throw new IllegalArgumentException("Match not found");
+        }
+        return match;
+
+    }
+
+
 
 }

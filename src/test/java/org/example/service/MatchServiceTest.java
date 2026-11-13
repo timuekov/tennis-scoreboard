@@ -5,10 +5,39 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MatchServiceTest {
+
+    @Test
+    void getMatchByUuidThrowsExceptionWhenMatchNotFound() {
+        CurrentMatchStorage currentMatchStorage = new CurrentMatchStorage();
+
+        MatchService matchService = new MatchService(currentMatchStorage);
+
+        UUID uuid = UUID.randomUUID();
+
+        assertThrows(IllegalArgumentException.class, () -> matchService.getMatchByUuid(uuid));
+
+    }
+
+
+    @Test
+    void getMatchByUuidTest() {
+        CurrentMatchStorage currentMatchStorage = new CurrentMatchStorage();
+
+        MatchService matchService = new MatchService(currentMatchStorage);
+
+        UUID uuid = matchService.createMatch("Pete", "Greg");
+
+        Match match = currentMatchStorage.getMatch(uuid);
+
+        Match result = matchService.getMatchByUuid(uuid);
+
+        assertSame(match, result);
+
+    }
+
 
     @Test
     void createMatchShouldSaveMatch() {
@@ -25,5 +54,7 @@ public class MatchServiceTest {
         assertEquals("Kate", match.getPlayer1().getName());
         assertEquals("Mary", match.getPlayer2().getName());
     }
+
+
 
 }
