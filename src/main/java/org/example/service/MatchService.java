@@ -46,9 +46,22 @@ public class MatchService {
 
     }
 
-    void addPointToMatch(UUID uuid, int playerNumber) {
+    void addPointToMatch(UUID uuid, String playerName) {
 
-        getMatchByUuid(uuid).addPoint(playerNumber);
+        Match match = getMatchByUuid(uuid);
+
+        Player player1 = match.getPlayer1();
+        Player player2 = match.getPlayer2();
+
+        if (playerName.equals(player1.getName())) {
+
+            match.addPoint(1);
+
+        }  else if (playerName.equals(player2.getName())) {
+            match.addPoint(2);
+        } else {
+            throw new IllegalArgumentException("Player not found.");
+        }
 
     }
 

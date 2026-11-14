@@ -10,6 +10,42 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MatchServiceTest {
 
     @Test
+    void addPointToMatchShouldThrowExceptionWhenPlayerNotFound() {
+
+        CurrentMatchStorage currentMatchStorage = new CurrentMatchStorage();
+
+        MatchService matchService = new MatchService(currentMatchStorage);
+
+        UUID uuid = matchService.createMatch("Alex", "Bob");
+
+        assertThrows(IllegalArgumentException.class, ()-> matchService.addPointToMatch(uuid, "Mike"));
+    }
+
+
+
+    @Test
+    void addPointToMatchShouldUpdateScoreByPlayerName() {
+
+        CurrentMatchStorage currentMatchStorage = new CurrentMatchStorage();
+
+        MatchService matchService = new MatchService(currentMatchStorage);
+
+        UUID uuid =  matchService.createMatch("Alex", "Bob");
+
+        matchService.addPointToMatch(uuid,"Bob");
+
+        Match match = matchService.getMatchByUuid(uuid);
+
+        assertEquals(15, match.getCurrentScore().getPoints2());
+        assertEquals(0, match.getCurrentScore().getPoints1());
+
+
+
+    }
+
+
+
+    @Test
     void createMatchShouldThrowExceptionWhenPlayerNamesAreEqual() {
 
         CurrentMatchStorage currentMatchStorage = new CurrentMatchStorage();
@@ -29,7 +65,7 @@ public class MatchServiceTest {
 
         UUID uuid = UUID.randomUUID();
 
-        assertThrows(IllegalArgumentException.class, ()-> matchService.addPointToMatch(uuid, 1));
+        assertThrows(IllegalArgumentException.class, ()-> matchService.addPointToMatch(uuid, "Bob"));
     }
 
 
@@ -43,7 +79,7 @@ public class MatchServiceTest {
 
         UUID uuid = matchService.createMatch("Don", "Ron");
 
-        matchService.addPointToMatch(uuid, 2);
+        matchService.addPointToMatch(uuid, "Ron");
 
         Match match = matchService.getMatchByUuid(uuid);
 
@@ -61,7 +97,7 @@ public class MatchServiceTest {
 
         UUID uuid = matchService.createMatch("Don", "Ron");
 
-        matchService.addPointToMatch(uuid, 1);
+        matchService.addPointToMatch(uuid, "Don");
 
         Match match = matchService.getMatchByUuid(uuid);
 
