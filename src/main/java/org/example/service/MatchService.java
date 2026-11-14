@@ -20,6 +20,10 @@ public class MatchService {
 
     public UUID createMatch(String name1, String name2) {
 
+        if (name1.equals(name2)) {
+            throw new IllegalArgumentException("Player names must be different");
+        }
+
         Player player1 = new Player(name1);
         Player player2 = new Player(name2);
 

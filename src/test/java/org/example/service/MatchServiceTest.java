@@ -10,6 +10,18 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MatchServiceTest {
 
     @Test
+    void createMatchShouldThrowExceptionWhenPlayerNamesAreEqual() {
+
+        CurrentMatchStorage currentMatchStorage = new CurrentMatchStorage();
+        MatchService matchService = new MatchService(currentMatchStorage);
+
+        assertThrows(IllegalArgumentException.class, ()-> matchService.createMatch("Alex", "Alex"));
+
+    }
+
+
+
+    @Test
     void addPointToMatchShouldThrowExceptionWhenMatchNotFound() {
         CurrentMatchStorage currentMatchStorage = new CurrentMatchStorage();
 
