@@ -10,6 +10,55 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MatchServiceTest {
 
     @Test
+    void addPointToMatchShouldThrowExceptionWhenMatchNotFound() {
+        CurrentMatchStorage currentMatchStorage = new CurrentMatchStorage();
+
+        MatchService matchService = new MatchService(currentMatchStorage);
+
+        UUID uuid = UUID.randomUUID();
+
+        assertThrows(IllegalArgumentException.class, ()-> matchService.addPointToMatch(uuid, 1));
+    }
+
+
+
+    @Test
+    void addPointToMatchShouldUpdateScore2() {
+
+        CurrentMatchStorage currentMatchStorage = new CurrentMatchStorage();
+
+        MatchService matchService = new MatchService(currentMatchStorage);
+
+        UUID uuid = matchService.createMatch("Don", "Ron");
+
+        matchService.addPointToMatch(uuid, 2);
+
+        Match match = matchService.getMatchByUuid(uuid);
+
+        assertEquals(15, match.getCurrentScore().getPoints2());
+        assertEquals(0, match.getCurrentScore().getPoints1());
+    }
+
+
+    @Test
+    void addPointToMatchShouldUpdateScore() {
+
+        CurrentMatchStorage currentMatchStorage = new CurrentMatchStorage();
+
+        MatchService matchService = new MatchService(currentMatchStorage);
+
+        UUID uuid = matchService.createMatch("Don", "Ron");
+
+        matchService.addPointToMatch(uuid, 1);
+
+        Match match = matchService.getMatchByUuid(uuid);
+
+        assertEquals(15, match.getCurrentScore().getPoints1());
+
+    }
+
+
+    @Test
     void getMatchByUuidThrowsExceptionWhenMatchNotFound() {
         CurrentMatchStorage currentMatchStorage = new CurrentMatchStorage();
 
@@ -54,7 +103,6 @@ public class MatchServiceTest {
         assertEquals("Kate", match.getPlayer1().getName());
         assertEquals("Mary", match.getPlayer2().getName());
     }
-
 
 
 }

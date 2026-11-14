@@ -3,6 +3,7 @@ package org.example.service;
 import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import org.example.model.Match;
 import org.example.model.Player;
+import org.example.model.Score;
 
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ public class MatchService {
 
     }
 
+
     public UUID createMatch(String name1, String name2) {
 
         Player player1 = new Player(name1);
@@ -28,6 +30,7 @@ public class MatchService {
         return uuid;
     }
 
+
     public Match getMatchByUuid(UUID uuid) {
         Match match = currentMatchStorage.getMatch(uuid);
 
@@ -39,6 +42,10 @@ public class MatchService {
 
     }
 
+    void addPointToMatch(UUID uuid, int playerNumber) {
 
+        getMatchByUuid(uuid).addPoint(playerNumber);
+
+    }
 
 }
