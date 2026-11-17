@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.nio.file.Path;
 
+import org.example.entity.MatchEntity;
 import org.example.entity.PlayerEntity;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -35,12 +36,13 @@ public class HibernateUtil {
 
         configuration.configure();
 
-
         Properties properties = loadLocalProperties();
 
         configuration.addProperties(properties);
 
         configuration.addAnnotatedClass(PlayerEntity.class);
+
+        configuration.addAnnotatedClass(MatchEntity.class);
 
         sessionFactory = configuration.buildSessionFactory();
 
