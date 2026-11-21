@@ -12,15 +12,15 @@ import jakarta.persistence.Table;
 @Table(name="Matches")
 public class MatchEntity {
 
-    @JoinColumn(name="Player1")
+    @JoinColumn(name="Player1", nullable = false)
     @ManyToOne
     private PlayerEntity player1;
 
-    @JoinColumn(name="Player2")
+    @JoinColumn(name="Player2", nullable = false)
     @ManyToOne
     private PlayerEntity player2;
 
-    @JoinColumn(name="Winner")
+    @JoinColumn(name="Winner", nullable = false)
     @ManyToOne
     private PlayerEntity winner;
 
