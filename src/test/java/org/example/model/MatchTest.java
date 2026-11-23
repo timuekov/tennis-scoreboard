@@ -7,6 +7,53 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MatchTest {
 
     @Test
+    void getWinnerReturnsNullWhenMatchIsInProgress() {
+
+        Player player1 = new Player("Rob");
+        Player player2 = new Player("Alex");
+
+        Match match = new Match(player1, player2);
+
+        for (int i = 1; i <= 40; i++) {
+            match.addPoint(1);
+        }
+
+        assertNull(match.getWinner());
+
+    }
+
+    @Test
+    void getWinnerReturnsPlayer2AfterWinningTwoSets() {
+
+        Player player1 = new Player("Rob");
+        Player player2 = new Player("Alex");
+
+        Match match = new Match(player1, player2);
+
+        for (int i = 1; i <= 48; i++) {
+            match.addPoint(2);
+        }
+
+        assertEquals(player2, match.getWinner());
+    }
+
+
+    @Test
+    void getWinnerReturnsPlayer1AfterWinningTwoSets() {
+
+        Player player1 = new Player("Rob");
+        Player player2 = new Player("Alex");
+
+        Match match = new Match(player1, player2);
+
+        for (int i = 1; i <= 48; i++) {
+            match.addPoint(1);
+        }
+
+        assertEquals(player1, match.getWinner());
+    }
+
+    @Test
     void addPointAfterMatchFinishedShouldThrowException() {
 
         Player player1 = new Player("Rob");

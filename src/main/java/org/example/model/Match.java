@@ -40,4 +40,15 @@ public class Match {
         }
     }
 
+    public Player getWinner() {
+        if (currentScore.getSets1() == 2) {
+            return player1;
+        } else if (currentScore.getSets2() == 2) {
+            return player2;
+        } else {
+            return null;
+        }
+    }
+
+
 }
