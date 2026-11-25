@@ -16,6 +16,63 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class MatchEntityPersistenceTest {
 
     @Test
+    void saveMatchWithExistingAndNewPlayer() {
+
+        HibernateUtil hibernateUtil = new HibernateUtil();
+
+        try (SessionFactory sessionFactory = hibernateUtil.createSessionFactory()) {
+
+            try (Session session = sessionFactory.openSession()) {
+
+                Transaction transaction = session.beginTransaction();
+
+                PlayerEntity playerEntity = new PlayerEntity("ExistingPlayer" + UUID.randomUUID());
+
+                session.persist(playerEntity);
+
+                transaction.commit();
+
+                PlayerEntity foundPlayer = session.createQuery("FROM PlayerEntity  WHERE name = :playerName",
+                        PlayerEntity.class).setParameter("playerName",
+                        playerEntity.getName()).getSingleResultOrNull();
+
+
+                assertNotNull(foundPlayer);
+                assertEquals(playerEntity.getId(), foundPlayer.getId());
+
+                Transaction matchTransaction = session.beginTransaction();
+
+                PlayerEntity newPlayer = new PlayerEntity("NewPlayer_" + UUID.randomUUID());
+
+                session.persist(newPlayer);
+
+                MatchEntity match = new MatchEntity(foundPlayer, newPlayer, newPlayer);
+
+                session.persist(match);
+
+                matchTransaction.commit();
+
+                assertNotNull(match.getId());
+
+                Transaction deleteTransaction = session.beginTransaction();
+
+                session.remove(match);
+
+                deleteTransaction.commit();
+
+                Transaction deletePlayersTransaction = session.beginTransaction();
+
+                session.remove(newPlayer);
+                session.remove(playerEntity);
+
+                deletePlayersTransaction.commit();
+            }
+
+        }
+
+    }
+
+    @Test
     void saveAndReadFinishedMatch() {
 
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -49,7 +106,7 @@ public class MatchEntityPersistenceTest {
 
             }
 
-            try(Session readSession = sessionFactory.openSession()) {
+            try (Session readSession = sessionFactory.openSession()) {
 
                 MatchEntity loadedMatch = readSession.get(MatchEntity.class, matchId);
 
@@ -65,7 +122,6 @@ public class MatchEntityPersistenceTest {
 
                 assertEquals(player1Id, loadedMatch.getPlayer1().getId());
                 assertEquals(player2Id, loadedMatch.getPlayer2().getId());
-
 
 
             }
